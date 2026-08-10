@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { TextInput, TouchableOpacity, View, Text } from "react-native";
-import { searchBar } from "src/styles/searchbar.styles";
+import { searchBar } from "../styles/searchBar.styles";
 
 
 interface SearchBarProps{
@@ -12,7 +12,7 @@ export default function SearchBar({ onSearch, loading = false }:SearchBarProps){
   const [searchText, setSearchText] = useState('');
 
   const handleSearch = () => {
-    console.log("searchText");
+    onSearch(searchText);
   }
 
   return (

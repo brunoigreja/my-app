@@ -23,8 +23,19 @@ export default function Details() {
   }, [cityName])
 
   const getWeatherData = async () => {
+    setLoading(true)
+    setError(null)
+
     const result = await getCurrentWeather(cityName as string)
-    console.log(result)
+
+    setLoading(false)
+
+    if (result.success) {
+      console.log(result.data)
+      setWeatherData(result.data)
+    } else {
+      setError(result.error)
+    }
   }
 
   return (

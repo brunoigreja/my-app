@@ -42,7 +42,7 @@ export default function WeatherCar({ weather }: WeatherCarProps) {
         </View>
 
         <View style={weatherCarStyles.detailItems}>
-          <Text style={weatherCarStyles.detailLabel} >Velocidade do Vento:</Text>
+          <Text style={weatherCarStyles.detailLabel} > Vento:</Text>
           <Text style={weatherCarStyles.detailValue}>{weather.wind.speed} m/s</Text>
         </View>
 

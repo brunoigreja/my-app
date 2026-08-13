@@ -31,7 +31,7 @@ export default function Details() {
     setLoading(false)
 
     if (result.success) {
-      console.log(result.data)
+      // console.log(result.data)
       setWeatherData(result.data)
     } else {
       setError(result.error)
@@ -45,6 +45,7 @@ export default function Details() {
         <TouchableOpacity style={detailsStyles.backButton} onPress={() => router.back()}>
           <Text style={detailsStyles.backButtonText}> ⬅️ Voltar</Text>
         </TouchableOpacity>
+
       {loading && (
         <View style={detailsStyles.header}>
           <Text style={detailsStyles.title}>Clima Atual</Text>
@@ -53,7 +54,7 @@ export default function Details() {
         </View >
       )}
 
-      {!loading && error &&(
+      {loading && (
         <View style={detailsStyles.loadingContainer}>
           <ActivityIndicator size="large" color="#0000ff" />
           <Text style={detailsStyles.loadingText}>Carregando...</Text>
@@ -61,8 +62,13 @@ export default function Details() {
         </View>
       )}
 
-      {!loading && !error && weatherData && (
-        <WeatherCar weather={weatherData}/>
+      {!loading && error && (
+        <View style={detailsStyles.errorContainer}>
+          <Text style={detailsStyles.errorText} >{error}</Text>
+          <TouchableOpacity onPress={getWeatherData} style={detailsStyles.retryButton}>
+            <Text style={detailsStyles.retryButtonText}>Tentar Novamente</Text>
+          </TouchableOpacity>
+        </View>
       )}
       
       </ScrollView>

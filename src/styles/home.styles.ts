@@ -35,5 +35,20 @@ export const homeStyles = StyleSheet.create({
     ...typography.body,
     color: colors.textLight,
     textAlign: 'center',
+  },
+  gpsButton: {
+    backgroundColor: colors.primary,
+    marginHorizontal: spacing.md,
+    marginTop: spacing.md,
+    paddingVertical: spacing.sm,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 48
+  },
+  gpsButtonText: {
+    color: colors.background,
+    fontSize: 16,
+    fontWeight: '600'
   }
 })

@@ -78,8 +78,7 @@ export const detailsStyles = StyleSheet.create({
     color: colors.cardBackground,
     fontSize: 16,
     fontWeight: 600,
-  }
-
+  },
 
 
 })

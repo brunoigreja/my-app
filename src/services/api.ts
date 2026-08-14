@@ -1,5 +1,5 @@
 import axios, { AxiosResponse, AxiosInstance } from 'axios';
-import { WeatherData } from 'src/types/weather';
+import { WeatherData, WeatherError } from 'src/types/weather';
 
 export type weatherResult =
   { success: true, data: WeatherData } | { success: false, error: string };
@@ -75,7 +75,7 @@ export const getCurrentWeather = async (cityName: string): Promise<weatherResult
 
   } catch (err) {
 
-    if (axios.isAxiosError(err)) {
+    if (axios.isAxiosError<WeatherError>(err)) {
       if (err.response) {
         return {
           success: false,
@@ -100,6 +100,44 @@ export const getCurrentWeather = async (cityName: string): Promise<weatherResult
       success: false,
       error: 'Erro ao buscar dados do clima'
     }
+  }
+}
+
+export const getCurrentWeatherBycoords = async (latitude: number, longitude: number): Promise<weatherResult> => {
+  try{
+    const response = await api.get<WeatherData>('/weather', {
+      params: {
+        lat: latitude,
+        lon: longitude
+      }
+    })
+
+    return {
+      success: true,
+      data: response.data
+    }
+
+  }catch(err){
+
+    if(axios.isAxiosError<WeatherError>(err)){
+      if(err.response){
+        return{
+          success: false,
+          error: getErrorMessage(err.response.status)
+        }
+      } else if(err.request){
+        return {
+          success: false,
+          error: 'Sem conexão com servidor, tente novamente'
+        }
+      }
+    }
+
+    return {
+      success: false,
+      error: 'Erro ao buscar clima'
+    }
+
   }
 }
 

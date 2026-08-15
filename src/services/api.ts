@@ -1,5 +1,5 @@
 import axios, { AxiosResponse, AxiosInstance } from 'axios';
-import { WeatherData } from 'src/types/weather';
+import { WeatherData, WeatherError } from 'src/types/weather';
 
 export type weatherResult =
   { success: true, data: WeatherData } | { success: false, error: string };
@@ -20,6 +20,37 @@ const api = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+const getErrorMessage = (statusCode: number): string => {
+
+  switch (statusCode) {
+    case 400:
+
+      return 'Requisição inválida';
+    case 401:
+
+      return 'Chave de acesso inválida';
+    case 404:
+
+      return 'Cidade não encontrada';
+      case 429:
+
+      return 'Servidor sobrecarregado. Tente novamente mais tarde';
+      case 500:
+
+      return 'Erro interno do servidor, tente novamente mais tarde';
+
+      case 503:
+
+      return 'Serviço indisponível, tente novamente mais tarde';
+
+    default:
+      return 'Erro ao buscar clima, tente novamente mais tarde';
+  }
+
+}
+
+
 
 export const getCurrentWeather = async (cityName: string): Promise<weatherResult> => {
   try {
@@ -43,9 +74,73 @@ export const getCurrentWeather = async (cityName: string): Promise<weatherResult
 
 
   } catch (err) {
+
+    if (axios.isAxiosError<WeatherError>(err)) {
+      if (err.response) {
+        return {
+          success: false,
+          error: getErrorMessage(err.response.status)
+        }
+      } else if(err.request) {
+        return {
+          success: false,
+          error: 'Sem resposta do servidor, tente novamente mais tarde'
+        }
+      }
+      else {
+        return {
+          success: false,
+          error: 'Erro ao buscar clima, tente novamente mais tarde'
+        }
+      }
+      
+    }
+
     return {
       success: false,
       error: 'Erro ao buscar dados do clima'
     }
   }
 }
+
+export const getCurrentWeatherBycoords = async (latitude: number, longitude: number): Promise<weatherResult> => {
+  try{
+    const response = await api.get<WeatherData>('/weather', {
+      params: {
+        lat: latitude,
+        lon: longitude
+      }
+    })
+
+    return {
+      success: true,
+      data: response.data
+    }
+
+  }catch(err){
+
+    if(axios.isAxiosError<WeatherError>(err)){
+      if(err.response){
+        return{
+          success: false,
+          error: getErrorMessage(err.response.status)
+        }
+      } else if(err.request){
+        return {
+          success: false,
+          error: 'Sem conexão com servidor, tente novamente'
+        }
+      }
+    }
+
+    return {
+      success: false,
+      error: 'Erro ao buscar clima'
+    }
+
+  }
+}
+
+  export const getWeatherIcon = (iconCode: string): string => {
+    return `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+  }

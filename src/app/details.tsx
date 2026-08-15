@@ -1,12 +1,11 @@
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import { ActivityIndicator, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { detailsStyles } from "src/styles/details.styles";
-import { useRouter, useLocalSearchParams } from "expo-router";
-import { getCurrentWeather } from "src/services/api";
-import { useEffect, useState } from "react";
-import { get } from "react-native/Libraries/NativeComponent/NativeComponentRegistry";
-import { WeatherData } from "src/types/weather";
 import WeatherCar from "src/components/WeatherCar";
+import { getCurrentWeather } from "src/services/api";
+import { detailsStyles } from "src/styles/details.styles";
+import { WeatherData } from "src/types/weather";
 
 
 
@@ -69,6 +68,10 @@ export default function Details() {
             <Text style={detailsStyles.retryButtonText}>Tentar Novamente</Text>
           </TouchableOpacity>
         </View>
+      )}
+
+      {!loading && !error && weatherData && (
+          <WeatherCar weather={weatherData} />
       )}
       
       </ScrollView>

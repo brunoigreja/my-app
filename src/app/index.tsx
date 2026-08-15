@@ -9,10 +9,11 @@ export default function App() {
   const router = useRouter()
 
   const handleSearch = (cityName: string) => {
+    // Cast to any to satisfy router.push typing for dynamic route
     router.push({
       pathname: '/details',
       params: { cityName }
-    })
+    } as any)
   }
 
   return (
